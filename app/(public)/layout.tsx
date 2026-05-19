@@ -4,11 +4,11 @@ import { ScoresWidget } from "@/components/scores/ScoresWidget";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <ScoresWidget />
       <Header />
-      <main className="min-h-screen">{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }
