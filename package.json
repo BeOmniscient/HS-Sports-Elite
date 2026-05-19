@@ -7,7 +7,8 @@
     "build": "NEXT_TURBOPACK=0 next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "npx ts-node --project tsconfig.scripts.json scripts/migrate.ts"
+    "migrate": "npx ts-node --project tsconfig.scripts.json scripts/migrate.ts",
+    "backfill-images": "npx ts-node --project tsconfig.scripts.json scripts/backfill-images.ts"
   },
   "dependencies": {
     "@portabletext/react": "^3.1.0",

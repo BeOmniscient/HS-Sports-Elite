@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server";
 import { sanityWriteClient } from "@/lib/sanity/client";
+import { fetchAndUploadArticleImage } from "@/lib/images/auto-image";
 
 // Run daily via Vercel Cron (see vercel.json)
 // Protected by CRON_SECRET header
 
 const RSS_FEEDS = [
-  // Google News — NJ high school sports (customize query as needed)
   { url: "https://news.google.com/rss/search?q=New+Jersey+high+school+sports+Bergen+County&hl=en-US&gl=US&ceid=US:en", defaultSport: null },
   { url: "https://news.google.com/rss/search?q=NJSIAA+football&hl=en-US&gl=US&ceid=US:en", defaultSport: "Football" },
   { url: "https://news.google.com/rss/search?q=NJSIAA+basketball&hl=en-US&gl=US&ceid=US:en", defaultSport: "Basketball" },
   { url: "https://news.google.com/rss/search?q=NJ+high+school+baseball+2026&hl=en-US&gl=US&ceid=US:en", defaultSport: "Baseball" },
   { url: "https://news.google.com/rss/search?q=Northern+NJ+high+school+soccer&hl=en-US&gl=US&ceid=US:en", defaultSport: "Soccer" },
-  // NJAthletics.net
   { url: "https://njathletics.net/blogs/news.atom", defaultSport: null },
 ];
 
@@ -45,13 +44,13 @@ export async function GET(req: Request) {
 
   let imported = 0;
   let skipped = 0;
+  let withImages = 0;
 
   for (const feed of RSS_FEEDS) {
     try {
       const res = await fetch(feed.url, { next: { revalidate: 0 } });
       const xml = await res.text();
 
-      // Parse RSS items (basic XML parsing without external dep)
       const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
 
       for (const [, itemXml] of items) {
@@ -68,7 +67,6 @@ export async function GET(req: Request) {
 
         if (!title || !link) continue;
 
-        // Only include NJ-relevant articles
         const fullText = `${title} ${description}`;
         const isNJRelevant = /\bnj\b|new jersey|bergen|passaic|essex|union|morris|hudson|northern valley|old tappan|njsiaa/i.test(fullText);
         if (!isNJRelevant) { skipped++; continue; }
@@ -78,7 +76,6 @@ export async function GET(req: Request) {
 
         const slug = generateSlug(title);
 
-        // Skip if slug already exists
         const existing = await sanityWriteClient.fetch(
           `*[_type == "article" && slug.current == $slug][0]._id`,
           { slug }
@@ -87,6 +84,13 @@ export async function GET(req: Request) {
 
         const publishedAt = pubDate ? new Date(pubDate).toISOString() : new Date().toISOString();
         const excerpt = description.replace(/<[^>]+>/g, "").slice(0, 300);
+
+        // Fetch image (feed → OG → Unsplash)
+        const featuredImage = await fetchAndUploadArticleImage({
+          feedItemXml: itemXml,
+          sourceUrl: link,
+          sport,
+        });
 
         await sanityWriteClient.create({
           _type: "article",
@@ -98,13 +102,16 @@ export async function GET(req: Request) {
           isPremium: false,
           source: "rss",
           sourceUrl: link,
+          ...(featuredImage && { featuredImage }),
         });
+
         imported++;
+        if (featuredImage) withImages++;
       }
     } catch (err) {
       console.error(`RSS feed error for ${feed.url}:`, err);
     }
   }
 
-  return NextResponse.json({ ok: true, imported, skipped });
+  return NextResponse.json({ ok: true, imported, skipped, withImages });
 }
