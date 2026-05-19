@@ -46,7 +46,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    animation: ticker 60s linear infinite;
+    animation: ticker 120s linear infinite;
     will-change: transform;
   }
   .ticker-track:hover {
