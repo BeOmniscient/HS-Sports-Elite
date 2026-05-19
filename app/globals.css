@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
@@ -32,11 +33,20 @@
   }
 
   .ticker-wrap {
+    position: relative;
     overflow: hidden;
-    contain: layout style;
+    height: 36px;
+    flex: 1;
+    min-width: 0;
   }
   .ticker-track {
-    animation: ticker 30s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    animation: ticker 22s linear infinite;
     will-change: transform;
   }
   .ticker-track:hover {
