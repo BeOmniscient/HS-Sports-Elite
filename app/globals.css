@@ -29,4 +29,17 @@
   .section-heading {
     @apply text-xs font-black uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-4;
   }
+
+  .ticker-track {
+    animation: ticker 60s linear infinite;
+    will-change: transform;
+  }
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
