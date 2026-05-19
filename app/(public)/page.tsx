@@ -21,7 +21,7 @@ export default async function HomePage() {
   const grid = featured ? latest.filter((a) => a._id !== featured._id).slice(0, 9) : latest.slice(0, 9);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50">
       {/* Hero */}
       {featured && <HeroArticle article={featured} />}
 

@@ -61,7 +61,7 @@ export default async function ScoresPage({
   ]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50">
       {/* Page header */}
       <div className="bg-brand-dark border-b border-white/10">
         <div className="max-w-screen-xl mx-auto px-4 py-6">

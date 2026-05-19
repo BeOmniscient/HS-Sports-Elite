@@ -26,7 +26,7 @@ const PREMIUM_FEATURES = [
 
 export default function SubscribePage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50">
       {/* Hero */}
       <div className="bg-brand-dark text-white py-16 px-4 text-center">
         <Zap className="w-8 h-8 text-brand-red fill-brand-red mx-auto mb-4" />
