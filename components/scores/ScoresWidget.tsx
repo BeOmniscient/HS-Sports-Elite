@@ -53,7 +53,7 @@ export async function ScoresWidget() {
         </div>
 
         {/* Scrolling ticker */}
-        <div className="overflow-hidden flex-1 relative">
+        <div className="ticker-wrap flex-1 relative">
           <div className="ticker-track flex gap-0 items-center">
             {items.map((article, i) => {
               const hex = SPORT_HEX[article.sport?.toLowerCase().replace(/ /g, "-")] ?? "#ef4444";

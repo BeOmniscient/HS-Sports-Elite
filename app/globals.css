@@ -31,6 +31,10 @@
     @apply text-xs font-black uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-4;
   }
 
+  .ticker-wrap {
+    overflow: hidden;
+    contain: layout style;
+  }
   .ticker-track {
     animation: ticker 30s linear infinite;
     will-change: transform;
