@@ -38,7 +38,6 @@ export function HeroArticle({ article }: { article: Article }) {
             href={`/sports/${sportSlug}`}
             className="inline-block text-white text-[11px] font-black uppercase tracking-widest px-3 py-1 mb-4 rounded-sm"
             style={{ backgroundColor: sportHex }}
-            onClick={(e) => e.stopPropagation()}
           >
             {article.sport}
           </Link>
