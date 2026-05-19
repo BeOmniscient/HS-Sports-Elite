@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACE IN THE HOLE — High School Sports Elite</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #1a1a1a;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  /* ── Magazine wrapper ── */
+  .magazine {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+  }
+
+  /* ── Masthead bar ── */
+  .masthead {
+    background: #0d1b2a;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .masthead .brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e8c84a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .masthead .issue {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: #8a9bb0;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Hero section ── */
+  .hero {
+    position: relative;
+    background: #0d1b2a;
+    overflow: hidden;
+  }
+
+  /* Photo placeholder */
+  .photo-zone {
+    width: 100%;
+    height: 440px;
+    background: linear-gradient(160deg, #0d1b2a 0%, #1a2f45 40%, #0d1b2a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px dashed #2e4a64;
+    position: relative;
+    cursor: pointer;
+  }
+  .photo-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .photo-zone img#athlete-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: none;
+  }
+  .photo-zone .placeholder-text {
+    text-align: center;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .photo-zone .placeholder-text .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+  .photo-zone .placeholder-text p {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8a9bb0;
+  }
+  .photo-zone .placeholder-text p.sub {
+    font-size: 11px;
+    color: #4a6a84;
+    margin-top: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* Photo gradient overlay */
+  .hero-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(13,27,42,0.98) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Red accent stripe */
+  .accent-stripe {
+    height: 5px;
+    background: linear-gradient(90deg, #c0392b 0%, #e74c3c 50%, #c0392b 100%);
+  }
+
+  /* ── Hero text ── */
+  .hero-text {
+    background: #0d1b2a;
+    padding: 32px 40px 36px;
+  }
+  .sport-tag {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #e8c84a;
+    border: 1.5px solid #e8c84a;
+    padding: 3px 10px;
+    margin-bottom: 16px;
+  }
+  .headline {
+    font-family: 'Oswald', sans-serif;
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 0.95;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .headline span { color: #e8c84a; }
+  .subheadline {
+    font-family: 'Merriweather', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: #8a9bb0;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+  .byline-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid #1e3450;
+    padding-top: 16px;
+  }
+  .byline {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #4a6a84;
+  }
+  .byline strong { color: #8a9bb0; }
+  .score-badge {
+    margin-left: auto;
+    background: #e8c84a;
+    color: #0d1b2a;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 18px;
+    letter-spacing: 1px;
+  }
+
+  /* ── Body layout ── */
+  .body-layout {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 0;
+  }
+
+  /* ── Article body ── */
+  .article-body {
+    padding: 40px 36px 40px 40px;
+    border-right: 1px solid #e8e8e8;
+  }
+  .drop-cap::first-letter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 78px;
+    font-weight: 700;
+    line-height: 0.75;
+    float: left;
+    margin: 6px 10px 0 0;
+    color: #0d1b2a;
+  }
+  .article-body p {
+    font-family: 'Merriweather', serif;
+    font-size: 15px;
+    line-height: 1.85;
+    color: #2a2a2a;
+    margin-bottom: 20px;
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 28px;
+    border-left: 5px solid #e8c84a;
+    background: #fafafa;
+  }
+  .pull-quote p {
+    font-family: 'Oswald', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600;
+    line-height: 1.3 !important;
+    color: #0d1b2a !important;
+    margin: 0 0 8px !important;
+  }
+  .pull-quote cite {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  /* Box score */
+  .box-score {
+    margin-top: 36px;
+    border-top: 3px solid #0d1b2a;
+  }
+  .box-score h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #0d1b2a;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 0;
+  }
+  .box-score table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+  }
+  .box-score thead tr {
+    background: #0d1b2a;
+    color: #fff;
+  }
+  .box-score thead th {
+    padding: 7px 8px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+  .box-score thead th:first-child { text-align: left; }
+  .box-score tbody tr:nth-child(even) { background: #f5f7fa; }
+  .box-score tbody td {
+    padding: 7px 8px;
+    text-align: center;
+    color: #333;
+  }
+  .box-score tbody td:first-child { text-align: left; font-weight: 600; }
+  .box-score tfoot td {
+    padding: 7px 8px;
+    font-weight: 700;
+    font-size: 12px;
+    background: #0d1b2a;
+    color: #e8c84a;
+    text-align: center;
+  }
+  .box-score tfoot td:first-child { text-align: left; }
+  .winner { color: #1a7a3c !important; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    padding: 36px 28px;
+    background: #f7f8fa;
+  }
+
+  .stat-card {
+    background: #0d1b2a;
+    color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: #e8c84a;
+  }
+  .stat-card .label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #4a6a84;
+    margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #e8c84a;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .stat-card .context {
+    font-size: 11px;
+    color: #6a8aa4;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-section {
+    margin-bottom: 28px;
+  }
+  .sidebar-section h4 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #0d1b2a;
+    border-bottom: 2px solid #0d1b2a;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #e4e8ee;
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .s-label { color: #555; }
+  .stat-row .s-val { font-weight: 700; color: #0d1b2a; font-family: 'Oswald', sans-serif; font-size: 15px; }
+
+  .game-info-item {
+    font-size: 12px;
+    color: #555;
+    padding: 5px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .game-info-item .gi-label {
+    font-weight: 600;
+    color: #0d1b2a;
+    min-width: 65px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Footer ── */
+  .footer-bar {
+    background: #0d1b2a;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bar span {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4a6a84;
+  }
+  .footer-bar .tag { color: #e8c84a; }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; }
+    .magazine { box-shadow: none; margin: 0; }
+    .photo-zone input[type="file"] { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="magazine">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="brand">High School Sports Elite</div>
+    <div class="issue">NJ Baseball &nbsp;·&nbsp; May 14, 2026 &nbsp;·&nbsp; Big North Conference</div>
+  </div>
+
+  <!-- Hero photo -->
+  <div class="hero">
+    <div class="photo-zone" id="photoZone">
+      <img id="athlete-photo" src="" alt="Selden Kolkebeck">
+      <div class="placeholder-text" id="placeholderText">
+        <div class="icon">📷</div>
+        <p>Click to add photo of Selden Kolkebeck</p>
+        <p class="sub">Recommended: action shot, min. 1200×800px</p>
+      </div>
+      <input type="file" accept="image/*" onchange="loadPhoto(event)">
+    </div>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="accent-stripe"></div>
+
+  <!-- Hero text -->
+  <div class="hero-text">
+    <div class="sport-tag">&#9733; Boys Baseball</div>
+    <h1 class="headline">Ace in<br>the <span>Hole</span></h1>
+    <p class="subheadline">Selden Kolkebeck was unhittable, untouchable, and utterly dominant — ten strikeouts, seven innings, and one statement win over No. 11 DePaul.</p>
+    <div class="byline-row">
+      <div>
+        <div class="byline">By <strong>High School Sports Elite Staff</strong></div>
+        <div class="byline" style="margin-top:3px;">Old Tappan vs. DePaul &nbsp;·&nbsp; May 14, 2026</div>
+      </div>
+      <div class="score-badge">OLD TAPPAN 3 &nbsp;·&nbsp; DePAUL 2</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-layout">
+
+    <!-- Article text -->
+    <div class="article-body">
+
+      <p class="drop-cap">Selden Kolkebeck was the story from first pitch to last, spinning a gem on the mound as Old Tappan (19-4) edged No. 11 DePaul (17-5) by a final of 3-2 in a tightly contested Big North showdown. Kolkebeck went the distance — all seven innings — allowing just three hits and two runs, walking two, and punching out an eye-popping <strong>ten batters</strong> on 99 pitches to improve his ERA to a pristine 1.00 on the season.</p>
+
+      <div class="pull-quote">
+        <p>"Ten strikeouts. Seven innings. One earned run. Kolkebeck is pitching at a level few in the state can match right now."</p>
+        <cite>— High School Sports Elite</cite>
+      </div>
+
+      <p>Old Tappan scratched across single runs in the 2nd, 5th, and 6th innings, with <strong>Joey Crescitelli</strong> plating the go-ahead run and <strong>Anthony Onnembo</strong> reaching base three times on walks to keep rallies alive throughout the afternoon. It was methodical, patient, and exactly the kind of offense that complements an elite arm on the mound.</p>
+
+      <p>DePaul got a spark from speedy leadoff man <strong>Jason Amalbert</strong>, who reached base twice, scored both Cavalier runs, and swiped three bags to give his team every opportunity to steal the game. <strong>J.C. Pacheco</strong> delivered the big blow — a clutch single that drove in both DePaul runs in a late bid to claw back into contention. But it wasn't enough. DePaul starter <strong>Jackson Schessler</strong> surrendered seven walks in 5.2 innings, and three costly Cavalier errors gave Old Tappan just enough breathing room to hold on.</p>
+
+      <p>When Kolkebeck retired the final batter to seal it, the Golden Knights had knocked off a top-15 program and served notice that they are a team playing their best baseball at exactly the right time of year. With a 19-4 record and a 9-1 mark in the Big North National division, Old Tappan is a serious postseason contender — and Kolkebeck is their ace, their anchor, and their best argument for a deep playoff run.</p>
+
+      <!-- Box score -->
+      <div class="box-score">
+        <h3>Box Score</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>
+              <th>R</th><th>H</th><th>E</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="winner">Old Tappan (19-4) ✓</td>
+              <td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td>
+              <td><strong>3</strong></td><td>5</td><td>0</td>
+            </tr>
+            <tr>
+              <td>DePaul (17-5)</td>
+              <td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td>
+              <td><strong>2</strong></td><td>4</td><td>3</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>WP: Selden Kolkebeck &nbsp;|&nbsp; LP: Jackson Schessler</td>
+              <td colspan="9"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <div class="stat-card">
+        <div class="label">Strikeouts</div>
+        <div class="value">10</div>
+        <div class="context">Kolkebeck's K total — 7 complete innings</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="label">Season ERA</div>
+        <div class="value">1.00</div>
+        <div class="context">After today's outing</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="label">Team Record</div>
+        <div class="value">19-4</div>
+        <div class="context">9-1 Big North – National</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Kolkebeck Line</h4>
+        <div class="stat-row"><span class="s-label">Innings Pitched</span><span class="s-val">7.0</span></div>
+        <div class="stat-row"><span class="s-label">Hits Allowed</span><span class="s-val">3</span></div>
+        <div class="stat-row"><span class="s-label">Earned Runs</span><span class="s-val">1</span></div>
+        <div class="stat-row"><span class="s-label">Walks</span><span class="s-val">2</span></div>
+        <div class="stat-row"><span class="s-label">Strikeouts</span><span class="s-val">10</span></div>
+        <div class="stat-row"><span class="s-label">Pitch Count</span><span class="s-val">99</span></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Game Info</h4>
+        <div class="game-info-item"><span class="gi-label">Date</span> Thursday, May 14, 2026</div>
+        <div class="game-info-item"><span class="gi-label">Time</span> 4:30 PM</div>
+        <div class="game-info-item"><span class="gi-label">League</span> Big North Conference</div>
+        <div class="game-info-item"><span class="gi-label">Location</span> DePaul Catholic HS</div>
+        <div class="game-info-item"><span class="gi-label">DePaul Rank</span> No. 11 in NJ</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>DePaul Standout</h4>
+        <div class="stat-row"><span class="s-label">J. Amalbert — H</span><span class="s-val">2</span></div>
+        <div class="stat-row"><span class="s-label">J. Amalbert — R</span><span class="s-val">2</span></div>
+        <div class="stat-row"><span class="s-label">J. Amalbert — SB</span><span class="s-val">3</span></div>
+        <div class="stat-row"><span class="s-label">JC Pacheco — RBI</span><span class="s-val">2</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-bar">
+    <span>highschoolsportselite.com</span>
+    <span class="tag">#NJBasebal2026 &nbsp;·&nbsp; #OldTappan &nbsp;·&nbsp; #BigNorth</span>
+    <span>© 2026 HS Sports Elite</span>
+  </div>
+
+</div>
+
+<script>
+function loadPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = document.getElementById('athlete-photo');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('placeholderText').style.display = 'none';
+    document.querySelector('.photo-zone').style.border = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
