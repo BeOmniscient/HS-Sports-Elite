@@ -29,7 +29,7 @@
     "react-dom": "^19.2.6",
     "resend": "^4.0.1",
     "rss-parser": "^3.13.0",
-    "sanity": "^5.25.1",
+    "sanity": "^5.31.2",
     "sharp": "^0.33.5",
     "stripe": "^22.1.1",
     "styled-components": "^6.4.1",
